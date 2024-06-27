@@ -4,6 +4,36 @@ on:
   workflow_dispatch:
 
 jobs:
+  mimic:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/stackrox-io/apollo-ci:stackrox-test-0.3.69
+      volumes:
+        # The updater makes heavy use of /tmp files.
+        - /tmp:/tmp
+        - /usr:/mnt/usr
+        - /opt:/mnt/opt
+    steps:
+    - name: Free up disk space
+      shell: bash
+      run: |
+        set +e
+        set -x
+        
+        df -h
+        
+        docker system prune --force --all
+        for delete in /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL; do
+          rm -rf "/mnt${delete:?}"
+          df -h "/mnt${delete:?}"
+        done
+        
+        df -h
+        
+        for path in /mnt/usr/share /mnt/usr/local/lib /mnt/opt /mnt/opt/hostedtoolcache; do
+          du --threshold=100 -hs "${path}"/* | sort -nr | tail -10
+        done
+  
   build:
     runs-on: ubuntu-latest
 
