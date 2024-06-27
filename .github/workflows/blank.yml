@@ -12,7 +12,7 @@ jobs:
 
       - name: Check Space Before
         run: |
-          df -si
+          df --si
           du -sh /usr/local/lib/android || true
           du -sh /usr/share/dotnet || true
           du -sh /opt/ghc || true
@@ -44,7 +44,7 @@ jobs:
           
       - name: Check Space After
         run: |
-          df -si
+          df --si
           du -sh /usr/local/lib/android || true
           du -sh /usr/share/dotnet || true
           du -sh /opt/ghc || true
