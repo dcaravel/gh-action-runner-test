@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run a multi-line script
+      - name: Check Space Before
         run: |
           df -si
           du -sh /usr/local/lib/android || true
@@ -18,6 +18,7 @@ jobs:
           du -sh /opt/ghc || true
           du -sh /usr/local/.ghcup || true
           du -sh "$AGENT_TOOLSDIRECTORY || true
+          
       - name: Do clean
         run: |
           sudo rm -rf /usr/local/lib/android || true
@@ -41,3 +42,11 @@ jobs:
           sudo rm -f /mnt/swapfile || true
           free -h
           
+      - name: Check Space After
+        run: |
+          df -si
+          du -sh /usr/local/lib/android || true
+          du -sh /usr/share/dotnet || true
+          du -sh /opt/ghc || true
+          du -sh /usr/local/.ghcup || true
+          du -sh "$AGENT_TOOLSDIRECTORY || true
