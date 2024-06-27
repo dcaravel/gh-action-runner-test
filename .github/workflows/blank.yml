@@ -19,20 +19,15 @@ jobs:
       run: |
         set +e
         set -x
-        
+
         df -h
-        
+
         docker system prune --force --all
         for delete in /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL; do
           rm -rf "/mnt${delete:?}"
-          df -h "/mnt${delete:?}"
         done
         
         df -h
-        
-        for path in /mnt/usr/share /mnt/usr/local/lib /mnt/opt /mnt/opt/hostedtoolcache; do
-          du --threshold=100 -hs "${path}"/* | sort -nr | tail -10
-        done
   
   build:
     runs-on: ubuntu-latest
