@@ -17,7 +17,7 @@ jobs:
           du -sh /usr/share/dotnet || true
           du -sh /opt/ghc || true
           du -sh /usr/local/.ghcup || true
-          du -sh "$AGENT_TOOLSDIRECTORY || true
+          du -sh "$AGENT_TOOLSDIRECTORY" || true
           
       - name: Do clean
         run: |
