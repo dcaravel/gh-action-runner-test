@@ -64,5 +64,5 @@ jobs:
         ls -lah .
         echo "A: $STACKROX_NVD_ZIP_PATH"
 
-        export STACKROX_NVD_ZIP_PATH="$(PWD)/nvd.zip"
+        export STACKROX_NVD_ZIP_PATH="$(pwd)/nvd.zip"
         echo "B: $STACKROX_NVD_ZIP_PATH"
