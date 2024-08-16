@@ -40,6 +40,13 @@ jobs:
 
   upload-release-vulnerabilities:
     runs-on: ubuntu-latest
+    container:
+      image: quay.io/stackrox-io/apollo-ci:stackrox-test-0.3.69
+      volumes:
+        # The updater makes heavy use of /tmp files.
+        - /tmp:/tmp
+        - /usr:/mnt/usr
+        - /opt:/mnt/opt
     needs:
     - download-nvd
     steps:
@@ -49,8 +56,13 @@ jobs:
         path: .
       continue-on-error: true
     - name: doit
+      env:
+        STACKROX_NVD_ZIP_PATH: nvd.zip
       shell: bash
       run: |
         echo "PWD: $(pwd)"
+        ls -lah .
+        echo "A: $STACKROX_NVD_ZIP_PATH"
 
-        ls -lah . | grep -i nvd
+        export STACKROX_NVD_ZIP_PATH="$(PWD)/nvd.zip"
+        echo "B: $STACKROX_NVD_ZIP_PATH"
