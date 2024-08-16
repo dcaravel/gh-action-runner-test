@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  mimic:
+  download-nvd:
     runs-on: ubuntu-latest
     env:
       EONE: ""
@@ -18,7 +18,7 @@ jobs:
             -w "%{http_code}" \
             "https://definitions.stackrox.io/v4/nvd/nvd-api.zip"
 
-        ls -la | grep -i nvd
+        ls -lha | grep -i nvd
     - id: upload-artifact-try1
       uses: actions/upload-artifact@v4
       with:
@@ -26,3 +26,18 @@ jobs:
         path: nvd.zip
         if-no-files-found: error
       continue-on-error: true
+
+  upload-release-vulnerabilities:
+    runs-on: ubuntu-latest
+    needs:
+    - download-nvd
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: nvd
+        path: .
+      continue-on-error: true
+    - name: doit
+      shell: bash
+      run: |
+        ls -lah . | grep -i nvd
