@@ -6,25 +6,12 @@ on:
 jobs:
   mimic:
     runs-on: ubuntu-latest
-    container:
-      image: quay.io/stackrox-io/apollo-ci:stackrox-test-0.3.69
-      volumes:
-        # The updater makes heavy use of /tmp files.
-        - /tmp:/tmp
-        - /usr:/mnt/usr
-        - /opt:/mnt/opt
+    env:
+      EONE: ""
+      ETWO: "NOTEMPTY"
     steps:
-    - name: Free up disk space
+    - name: step1
       shell: bash
       run: |
-        set +e
-        set -x
-
-        df -h
-
-        docker system prune --force --all
-        for delete in /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL; do
-          rm -rf "/mnt${delete:?}"
-        done
-        
-        df -h
+        echo "EONE: $EONE"
+        echo "ETWO: $ETWO"
