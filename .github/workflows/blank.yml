@@ -13,12 +13,19 @@ jobs:
     - name: step1
       shell: bash
       run: |
-        curl \
+        set -eu
+        since_time=$(date -u -d '24 hours ago' '+%a, %d %b %Y %H:%M:%S GMT')
+
+        code=$(curl \
             -o nvd.zip \
             -w "%{http_code}" \
-            "https://definitions.stackrox.io/v4/nvd/nvd-api.zip"
+            -H "If-Modified-Since: $since_time" \
+            "$url")
 
-        ls -lha | grep -i nvd
+        ls -lha | grep -i nvd || true
+        echo "code: $code"
+        echo "$code" | grep -q 200
+
     - id: upload-artifact-try1
       uses: actions/upload-artifact@v4
       with:
@@ -40,4 +47,6 @@ jobs:
     - name: doit
       shell: bash
       run: |
+        echo "PWD: $(pwd)"
+
         ls -lah . | grep -i nvd
