@@ -13,5 +13,16 @@ jobs:
     - name: step1
       shell: bash
       run: |
-        echo "EONE: $EONE"
-        echo "ETWO: $ETWO"
+        curl \
+            -o nvd.zip \
+            -w "%{http_code}" \
+            "https://definitions.stackrox.io/v4/nvd/nvd-api.zip"
+
+        ls -la | grep -i nvd
+    - id: upload-artifact-try1
+      uses: actions/upload-artifact@v4
+      with:
+        name: nvd
+        path: nvd.zip
+        if-no-files-found: error
+      continue-on-error: true
