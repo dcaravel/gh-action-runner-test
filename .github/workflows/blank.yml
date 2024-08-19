@@ -4,65 +4,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  download-nvd:
-    runs-on: ubuntu-latest
-    env:
-      JOB: ${{ github.event.inputs.job || 'nvd-api' }}
-    steps:
-    - name: step1
-      shell: bash
-      run: |
-        set -eu
-        since_time=$(date -u -d '24 hours ago' '+%a, %d %b %Y %H:%M:%S GMT')
-        if [ "$JOB" = "nvd-api" ]; then
-          url="https://definitions.stackrox.io/v4/nvd/nvd-api.zip"
-        else
-          url="https://definitions.stackrox.io/v4/nvd/nvd-feeds.zip"
-        fi
-
-        code=$(curl \
-            -o nvd.zip \
-            -w "%{http_code}" \
-            -H "If-Modified-Since: $since_time" \
-            "$url")
-
-        ls -lha | grep -i nvd || true
-        echo "code: $code"
-        echo "$code" | grep -q 200
-
-    - id: upload-artifact-try1
-      uses: actions/upload-artifact@v4
-      with:
-        name: nvd
-        path: nvd.zip
-        if-no-files-found: error
-      continue-on-error: true
-
-  upload-release-vulnerabilities:
+  doit:
     runs-on: ubuntu-latest
     container:
       image: quay.io/stackrox-io/apollo-ci:stackrox-test-0.3.69
       volumes:
         # The updater makes heavy use of /tmp files.
         - /tmp:/tmp
-        - /usr:/mnt/usr
-        - /opt:/mnt/opt
-    needs:
-    - download-nvd
     steps:
-    - uses: actions/download-artifact@v4
-      with:
-        name: nvd
-        path: .
-      continue-on-error: true
     - name: doit
       env:
-        STACKROX_NVD_ZIP_PATH: nvd.zip
+        ROX_PRODUCT_VERSION: 1.2.3
       shell: bash
       run: |
-        echo "PWD: $(pwd)"
-        ls -lah .
-        echo "A: $STACKROX_NVD_ZIP_PATH"
-
-        export STACKROX_NVD_ZIP_PATH="$(pwd)/nvd.zip"
-        echo "B: $STACKROX_NVD_ZIP_PATH"
+        if [[ "${{ github.ref_name }}" == "master" ]]; then
+          cmd+=(echo "Would do")
+        fi
+        "${cmd[@]}" curl https://example.com gs://definitions.stackrox.io/v4/vulnerability-bundles"
