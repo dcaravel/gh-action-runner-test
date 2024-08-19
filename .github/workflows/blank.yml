@@ -20,9 +20,21 @@ jobs:
         "${cmd[@]}" curl "https://example.com"
 
         echo "$(date)" > file.txt
+
+        ## force failure
+        exit 1
+
     - name: Create artifact
       uses: actions/upload-artifact@v4
       if: ${{ github.ref_name != 'main' }}
       with:
         name: ${{ env.ROX_PRODUCT_VERSION }}
         path: file.txt
+  
+  send-fake-notification:
+    runs-on: ubuntu-latest
+    if: failure() && ${{ github.ref_name == 'master' }}
+    steps:
+    - name: Send Slack notification on workflow failure
+      run: |
+        curl https://example.com/fail
