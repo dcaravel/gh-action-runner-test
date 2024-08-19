@@ -21,7 +21,7 @@ jobs:
           echo "Ref '${{ github.ref_name }}' is not master."
           cmd+=(echo "Would do: ")
         fi
-        "${cmd[@]}" curl "https://example.com"
+        "${cmd[@]}" curl -sSi "https://example.com"
 
         echo "$(date)" > file.txt
 
@@ -43,4 +43,4 @@ jobs:
     steps:
     - name: Send Slack notification on workflow failure
       run: |
-        curl https://example.com/fail
+        curl -sSi https://example.com/fail
