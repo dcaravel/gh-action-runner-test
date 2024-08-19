@@ -18,7 +18,7 @@ jobs:
       shell: bash
       run: |
         cmd=()
-        if [[ "${{ github.ref_name }}" != "master" ]]; then
+        if [[ "${{ github.ref_name }}" != "main" ]]; then
           echo "Ref '${{ github.ref_name }}' is not master."
           cmd+=(echo "Would do: ")
         fi
