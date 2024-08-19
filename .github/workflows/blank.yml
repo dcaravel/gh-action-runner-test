@@ -20,6 +20,6 @@ jobs:
         cmd=()
         if [[ "${{ github.ref_name }}" != "master" ]]; then
           echo "Ref '${{ github.ref_name }}' is not master."
-          cmd+=(echo "Would do")
+          cmd+=(echo "Would do: ")
         fi
         "${cmd[@]}" curl "https://example.com"
