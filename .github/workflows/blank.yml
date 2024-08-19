@@ -2,6 +2,10 @@ name: Blank
 
 on:
   workflow_dispatch:
+    inputs:
+      exit-with-error:
+        type: boolean
+        description: Force an error
 
 jobs:
   doit:
@@ -22,7 +26,9 @@ jobs:
         echo "$(date)" > file.txt
 
         ## force failure
-        exit 1
+        if [[ "${{ github.event.inputs.exit-with-error }}" == "true" ]]; then
+          exit 1
+        fi
 
     - name: Create artifact
       uses: actions/upload-artifact@v4
