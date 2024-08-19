@@ -39,6 +39,8 @@ jobs:
   
   send-fake-notification:
     runs-on: ubuntu-latest
+    needs:
+    - doit
     if: failure() && ${{ github.ref_name == 'master' }}
     steps:
     - name: Send Slack notification on workflow failure
