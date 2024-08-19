@@ -8,11 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ROX_PRODUCT_VERSION: 1.2.3
-    container:
-      image: quay.io/stackrox-io/apollo-ci:stackrox-test-0.3.69
-      volumes:
-        # The updater makes heavy use of /tmp files.
-        - /tmp:/tmp
     steps:
     - name: doit
       shell: bash
