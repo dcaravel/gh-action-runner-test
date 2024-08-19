@@ -20,4 +20,4 @@ jobs:
         if [[ "${{ github.ref_name }}" == "master" ]]; then
           cmd+=(echo "Would do")
         fi
-        "${cmd[@]}" curl https://example.com gs://definitions.stackrox.io/v4/vulnerability-bundles"
+        "${cmd[@]}" curl "https://example.com"
