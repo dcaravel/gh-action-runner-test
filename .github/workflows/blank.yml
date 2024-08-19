@@ -23,6 +23,8 @@ jobs:
         fi
         "${cmd[@]}" curl -sSi "https://example.com"
 
+        mkdir -p something
+        cd something
         echo "$(date)" > file.txt
 
         ## force failure
