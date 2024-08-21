@@ -30,13 +30,6 @@ jobs:
         if [[ "${{ github.event.inputs.exit-with-error }}" == "true" ]]; then
           exit 1
         fi
-
-    - name: Create artifact
-      uses: actions/upload-artifact@v4
-      if: ${{ github.ref_name != 'main' }}
-      with:
-        name: ${{ env.ROX_PRODUCT_VERSION }}
-        path: file.txt
   
   send-fake-notification:
     runs-on: ubuntu-latest
