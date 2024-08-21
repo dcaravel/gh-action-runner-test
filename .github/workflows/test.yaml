@@ -14,7 +14,7 @@ jobs:
     - name: Parse VULNERABILITY_BUNDLE_VERSION
       id: set-versions
       run: |
-        versions=$(grep -v '^#' VULNERABILITY_BUNDLE_VERSION | awk -F, '{print $1 "|" $2}' | paste -sd "," -)
+        versions=$(grep -vE '^#|^$' VULNERABILITY_BUNDLE_VERSION | awk -F, '{print $1 "|" $2}' | paste -sd "," -)
         versions_json="[\"${versions//,/\",\"}\"]"
         echo "Versions JSON: ${versions_json}"
         echo "versions=${versions_json}" >> "$GITHUB_OUTPUT"
