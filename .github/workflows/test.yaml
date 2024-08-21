@@ -1,0 +1,20 @@
+name: test
+on:
+  workflow_dispatch:
+jobs:
+  parse-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.set-versions.outputs.versions }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Parse VULNERABILITY_BUNDLE_VERSION
+      id: set-versions
+      run: |
+        versions=$(grep -v '^#' VULNERABILITY_BUNDLE_VERSION | awk -F, '{print $1 "|" $2}' | paste -sd "," -)
+        versions_json="[\"${versions//,/\",\"}\"]"
+        echo "Versions JSON: ${versions_json}"
+        echo "versions=${versions_json}" >> "$GITHUB_OUTPUT"
