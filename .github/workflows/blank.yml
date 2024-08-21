@@ -19,7 +19,7 @@ jobs:
         echo "Ref Name: ${{ github.ref_name }}"
 
         bucket="gs://definitions.stackrox.io/v4/vulnerability-bundles"
-        if [[ "${{ github.ref_name }}" != "master" ]]; then
+        if [[ "${{ github.ref_name }}" != "main" ]]; then
           # If dispatched from a branch other then master, upload bundles
           # to the test bucket instead
           bucket="gs://scanner-v4-test/vulnerability-bundles"
