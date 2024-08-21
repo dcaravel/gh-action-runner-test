@@ -18,3 +18,4 @@ jobs:
         versions_json="[\"${versions//,/\",\"}\"]"
         echo "Versions JSON: ${versions_json}"
         echo "versions=${versions_json}" >> "$GITHUB_OUTPUT"
+        echo "SHA: ${{ github.event.pull_request.head.sha }}"
