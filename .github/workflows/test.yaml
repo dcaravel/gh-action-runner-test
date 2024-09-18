@@ -4,18 +4,42 @@ on:
 jobs:
   parse-versions:
     runs-on: ubuntu-latest
-    outputs:
-      versions: ${{ steps.set-versions.outputs.versions }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Parse VULNERABILITY_BUNDLE_VERSION
-      id: set-versions
+    - name: Setup
       run: |
-        versions=$(grep -vE '^#|^[[:space:]]*$' VULNERABILITY_BUNDLE_VERSION | awk -F, '{print $1 "|" $2}' | paste -sd "," -)
-        versions_json="[\"${versions//,/\",\"}\"]"
-        echo "Versions JSON: ${versions_json}"
-        echo "versions=${versions_json}" >> "$GITHUB_OUTPUT"
-        echo "SHA: ${{ github.event.pull_request.head.sha }}"
+        mkdir unzip-test
+        cd unzip-test
+        mkdir f1
+        mkdir f2
+        echo "f1" > f1.txt
+        echo "f2" > f2.txt
+        echo "f1-1" > f1/f1-1.txt
+        echo "f2-1" > f2/f2-1.txt
+
+        zip -r f1.zip f1*
+        zip -r f2.zip f2*
+
+        rm f1.txt
+        rm f2.txt
+        rm -rf f1/
+        rm -rf f2/
+
+        ls -l
+
+        unzip -l f1.zip
+        unzip -l f2.zip
+
+        echo "Test1"
+        unzip f1.zip something.zip || true
+
+        echo "Test2"
+        unzip f1.zip f2.zip
+
+        echo "Results"
+        unzip -l f1.zip
+        unzip -l f2.zip
+        unzip -l something.zip || true
