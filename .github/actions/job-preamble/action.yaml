@@ -12,14 +12,22 @@ runs:
         cleanup=(
         # non-container jobs are first priority (every second may be a high % of the total)
         /usr/share/dotnet
+        /usr/share/doc/dotnet-*
         /usr/share/miniconda
         /usr/share/swift
         /usr/share/kotlinc
         /opt/ghc
+        /usr/local/.ghcup
+        /opt/cabal
+        /home/runner/.ghcup
+        /home/runner/.cabal
         /opt/hostedtoolcache/CodeQL
         /opt/hostedtoolcache/Ruby
         /opt/az
         /usr/local/lib/android
+        /opt/android
+        /usr/local/android-sdk
+        /home/runner/Android
         # container jobs are lower priority: they are already slowed by container image pulls
         /__t/CodeQL
         /__t/Ruby
